@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Title article
+{% endblock %}
+
+{% block body %}
+<h1>Show Article</h1>
+
+<section class="articles rounded shadow mt-5 p-3">
+		<article class="mb-2">
+			<h2>{{ article.title }}</h2>
+			<div class="metadata">
+				🕤 Submitted {{ article.createdAt|date('d/m/Y \\A\\t H:i') }} o'clock
+				<span class="badge badge-danger">
+					{{ article.category.title }}
+				</span>
+			</div>
+			<div class="content">
+				<img src="{{ article.image }}" class="m-1 rounded shadow" alt="{{ article.title }}" srcset="">
+				<p>{{ article.description }}</p>
+			</div>
+		</article>
+	</section>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome to my blogs
+{% endblock %}
+
+{% block body %}
+
+	<h2>Welcome to my blogs</h2>
+
+	{% for article in articles %}
+		<section class="articles rounded shadow mt-5 p-3">
+			<article class="mb-2">
+				<h2>{{ article.title }}</h2>
+				<div class="metadata">
+					🕤 Submitted
+					{{ article.createdAt|date('d/m/Y \\A\\t H:i') }}
+					o'clock
+					<span class="badge bg-danger">
+						{{ article.category.title }}
+					</span>
+				</div>
+				<div class="content">
+					<img src="{{ article.image }}" class="m-1 rounded shadow" alt="" srcset="">
+					<p>{{ article.description|u.truncate(150, '...', false) }}</p>
+					<a class="btn btn-info" href="{{ path('app_article_show', parameters = {'id': article.id}) }}">Read More</a>
+				</div>
+			</article>
+		</section>
+	{% endfor %}
+
+
+{% endblock %}
