@@ -7,12 +7,12 @@
 		<div class="collapse navbar-collapse" id="navbarColor01">
 			<ul class="navbar-nav me-auto">
 				<li class="nav-item">
-					<a class="nav-link active" href="#">Articles
+					<a class="nav-link {{ app.request.get('_route') == 'app_article' ? 'active' :''}}" href="{{ path('app_article') }}">Articles
 						<span class="visually-hidden">(current)</span>
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">Create Article</a>
+					<a class="nav-link {{ app.request.get('_route') == 'app_article_create' ? 'active' :'app_article_create'}}" href="{{ path('app_article') }}" href="{{ path('app_article_create') }}">Create Article</a>
 				</li>
 				
 

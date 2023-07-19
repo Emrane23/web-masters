@@ -1,24 +1,54 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Title article
+{% block title %}
+	{{ article.title }}
 {% endblock %}
 
 {% block body %}
-<h1>Show Article</h1>
+	<h1>Show Article</h1>
 
-<section class="articles rounded shadow mt-5 p-3">
+	<section class="articles rounded shadow mt-5 p-3">
 		<article class="mb-2">
 			<h2>{{ article.title }}</h2>
 			<div class="metadata">
-				🕤 Submitted {{ article.createdAt|date('d/m/Y \\A\\t H:i') }} o'clock
-				<span class="badge badge-danger">
+				🕤 Submitted
+				{{ article.createdAt|date('d/m/Y \\A\\t H:i') }}
+				o'clock
+				<span class="badge bg-danger">
 					{{ article.category.title }}
+				</span>
+				<span class="badge bg-success">
+					{{ article.comments|length }}
+					comments
 				</span>
 			</div>
 			<div class="content">
 				<img src="{{ article.image }}" class="m-1 rounded shadow" alt="{{ article.title }}" srcset="">
 				<p>{{ article.description }}</p>
 			</div>
+			<a href="{{ path('app_article_edit', parameters = {'id': article.id}) }}" class="btn btn-info">Edit</a>
 		</article>
+	</section>
+
+	<section id="comments">
+		{% for comment in article.comments %}
+			<div class="comment p-2">
+				<div class="row">
+					<div class="text-danger">
+						<b>{{ comment.author }}</b> 
+						<small>{{ comment.createdAt | date('d/m/Y \\A\\t H:i') }}</small>
+					</div>
+				</div>
+				<p>{{ comment.comment }}</p>
+			</div>
+		{% endfor %}
+	</section>
+	<hr>
+	<section>
+	<h2>Add Comment to this article</h2>
+	{{ form_start(form,{'attr': {'id': 'add_comment_form'}}) }}
+	{{ form_widget(form) }}
+	<button class="btn btn-success" type="submit">Add comment</button>
+	{{ form_end(form) }}
 	</section>
 {% endblock %}
