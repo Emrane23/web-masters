@@ -1,9 +1,13 @@
 {% for msg in app.session.flashbag.get('notice') %}
 	<div class="alert alert-dismissible alert-{{ msg.type }}">
 		<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-		<strong>Well done!</strong>
+		{# <strong>Well done!</strong> #}
 
-		<a href="{{ msg.url }}" class="alert-link">Article</a>
+		{% if msg.url %}
+			<a href="{{ msg.url }}" class="alert-link">Article</a>
+			{{ msg.message }}
+		{% else %}
 		{{ msg.message }}
+		{% endif %}
 	</div>
 {% endfor %}

@@ -4,3 +4,24 @@
 
 
 @import "toastr";
+
+.heading-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .heading-container h2 {
+    margin-right: 10px; /* Adjust the value to control the margin between the h2 and the spinner */
+  }
+
+/* Add this CSS to your stylesheet or <style> tag */
+.new-label {
+    background-color: #007bff;
+    color: #fff;
+    padding: 3px 6px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-right: 5px;
+    border-radius: 3px;
+  }
+  

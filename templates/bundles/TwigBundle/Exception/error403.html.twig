@@ -1,0 +1,16 @@
+{# templates/bundles/TwigBundle/Exception/error404.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+		<div class="col-md-6 mx-auto">
+			<h1 class="text-danger">Oops! An Error Occurred</h1>
+			<h2>The server returned a "403 Forbidden"</h2>
+			<p>
+				Something is broken. Please let us know what you were doing when this error
+				    occured. we will fix it as soon as possible. Sorry for any inconvenience caused. Go back
+				<a href="{{ path('app_article') }}">homepage</a>
+			</p>
+		</div>
+	</div>
+{% endblock %}

@@ -11,20 +11,38 @@ import toastr from 'toastr';
 $('#add_comment_form').submit(function (e) {
     e.preventDefault(); // Prevent the default form submission
 
-    var form = $(this);
+    var form = $('#add_comment_form');
     var url = form.attr('action');
     var data = form.serialize();
-
+        $('#button-add-comment').css('cursor', 'not-allowed');
+        $('#reloadSpinner').show();
     $.ajax({
         type: 'POST',
         url: url,
         data: data,
         success: function (response) {
-            // Handle the success response
             toastr.success('Comment added successfully!','well done',{timeOut: 5000,closeButton: true});
+            $('#button-add-comment').css('cursor', 'auto');
+            $('#reloadSpinner').hide();
+            $('.new-label').remove();
+
+            var newCommentSection = $(response.html).hide(); // Apply a fade-in animation
+            newCommentSection.find('.text-danger').prepend('<span class="new-label">New</span>');
+            newCommentSection.fadeIn(1000);
+
+            $('#comments').append(newCommentSection);
+
+            form[0].reset();
+
+            var nmbrComments = $('#nmbr-comments');
+            var initialCount = parseInt(nmbrComments.data('initial-count'));
+            nmbrComments.text(initialCount + 1 + ' comments');
+            nmbrComments.data('initial-count', initialCount + 1);
         },
         error: function (xhr, status, error) {
-            // Handle the error response
+            toastr.error('the server encounters an error!','Error',{timeOut: 5000,closeButton: true});
+            $('#button-add-comment').css('cursor', 'auto');
+            $('#reloadSpinner').hide();
             console.error(xhr.responseText);
         }
     });

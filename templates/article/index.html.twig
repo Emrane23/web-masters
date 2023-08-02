@@ -20,13 +20,18 @@
 					</span>
 				</div>
 				<div class="content">
-					<img src="{{ article.image }}" class="m-1 rounded shadow" alt="" srcset="">
+					<img src="{{ (article.imageName ? vich_uploader_asset(article) : '/images/placeholder.jpg') | imagine_filter('squared_thumbnail_medium') }}" class="m-1 rounded shadow" alt="" srcset="">
 					<p>{{ article.description|u.truncate(150, '...', false) }}</p>
 					<a class="btn btn-info" href="{{ path('app_article_show', parameters = {'id': article.id}) }}">Read More</a>
 				</div>
 			</article>
 		</section>
 	{% endfor %}
+	<div style="">
+	<div class="mt-3 d-flex justify-content-center navigation">
+    {{ knp_pagination_render(articles) }}
+	</div>
+	</div>
 
 
 {% endblock %}
