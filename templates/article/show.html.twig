@@ -11,7 +11,7 @@
 		<article class="mb-2">
 			<h2>{{ article.title }}</h2>
 			<div class="metadata">
-				🕤 Submitted
+				🕤 Submitted <a href="#">{{ app.user and article.user.fullname == app.user.fullname ? 'Me' : article.user.fullname }}</a> On
 				{{ article.createdAt|date('d/m/Y \\A\\t H:i') }}
 				o'clock
 				<span class="badge bg-danger">
@@ -27,7 +27,11 @@
 				<p>{{ article.description }}</p>
 			</div>
 			{% if is_granted('ARTICLE_MANAGE',article ) %}
-			<a href="{{ path('app_article_edit', parameters = {'id': article.id}) }}" class="btn btn-info">Edit</a>
+				<form action="{{ path('app_article_delete', parameters = {'id': article.id}) }}" method="post">
+				<a href="{{ path('app_article_edit', parameters = {'id': article.id}) }}" class="btn btn-info">Edit</a>
+				<input type="hidden" name="csrf_token" value="{{ csrf_token('article_delete_'~ article.id) }}">
+				<button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure ?')">Delete</button>
+				</form>
 			{% endif %}
 		</article>
 	</section>
@@ -55,7 +59,7 @@
 			</div>
 			{{ form_start(form,{'attr': {'id': 'add_comment_form'}}) }}
 			{{ form_widget(form) }}
-			<button id="button-add-comment" class="mt-2 btn btn-success" type="submit">Add comment</button>
+			<button id="button-add-comment" class="mt-2 btn btn-success not-allowed" type="submit" disabled>Add comment</button>
 			{{ form_end(form) }}
 			{% else %}
 			<h2 class="mr-2">You can add comment to this article by logged in </h2>

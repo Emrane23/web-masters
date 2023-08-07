@@ -1,0 +1,91 @@
+{% extends "@EasyAdmin/layout.html.twig" %}
+{% block content %}
+	<div class="jumbotron">
+		<h1 class="display-4 text-center">Administration</h1>
+		<p class="lead">Welcome to dashboard admin</p>
+		<div class="mx-auto w-75">
+			<canvas id="postChart"></canvas>
+		</div>
+		<hr><br>
+		Number total of articles :
+		<br>
+		<b>{{totalArticles}}</b><br>
+        <hr>
+        <div class="mx-auto w-75">
+			<canvas id="myChart"></canvas>
+		</div>
+
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
+	<script>
+		// Extract dates and post counts from the data passed from the controller
+const postData = {{ postData | json_encode | raw }};
+const PendingArticle = {{ pendingArticle | json_encode | raw  }}
+const approved = {{ totalArticles | json_encode | raw }} - PendingArticle;
+
+var xValues = ["Approved", "Pending"];
+var yValues = [approved, PendingArticle];
+var barColors = [
+  "#b91d47",
+  "#00aba9",
+];
+new Chart("myChart", {
+  type: "pie",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: "Articles"
+    }
+  }
+});
+// Extract dates and post counts from the data
+const dates = postData.map(item => item.date);
+const postCounts = postData.map(item => item.count);
+
+// Create the chart using Chart.js
+const ctx = document.getElementById('postChart').getContext('2d');
+const myChart = new Chart(ctx, {
+type: 'line', // You can change the chart type if desired (e.g., 'bar', 'pie', etc.)
+data: {
+labels: dates,
+datasets: [
+{
+label: 'Number of Articles',
+data: postCounts,
+borderColor: 'rgba(75, 192, 192, 1)',
+borderWidth: 1,
+fill: false
+}
+]
+},
+options: {
+responsive: true,
+scales: {
+x: {
+type: 'time', // Use 'time' scale for dates on the x-axis
+time: {
+unit: 'day', // Display the data per day
+tooltipFormat: 'YYYY-MM-DD', // Format for tooltips
+displayFormats: {
+day: 'YYYY-MM-DD' // Format for the x-axis labels
+}
+},
+distribution: 'linear' // Make sure dates are evenly distributed on the x-axis
+},
+y: {
+beginAtZero: true,
+stepSize: 1 // Customize the step size of the y-axis if needed
+}
+}
+}
+});
+	</script>
+{% endblock %}

@@ -93,4 +93,9 @@ class Category
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->title; // Adjust the property name according to your Category entity
+    }
 }

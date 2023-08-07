@@ -33,7 +33,7 @@ class Article
     private ?string $imageName = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Length(min:10,max:255 )]
+    #[Assert\Length(min:3,max:255 )]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -48,6 +48,9 @@ class Article
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
     private ?User $user = null;
+
+    #[ORM\Column(nullable: true, options:["default" => false])]
+    private ?bool $approved = false;
 
     public function __construct()
     {
@@ -181,6 +184,18 @@ class Article
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function isApproved(): ?bool
+    {
+        return $this->approved;
+    }
+
+    public function setApproved(?bool $approved): static
+    {
+        $this->approved = $approved;
 
         return $this;
     }

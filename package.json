@@ -20,6 +20,8 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "chartjs-adapter-date-fns": "^3.0.0",
+        "chartjs-adapter-moment": "^1.0.1",
         "toastr": "^2.1.4"
     }
 }

@@ -8,6 +8,11 @@
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.scss';
 import toastr from 'toastr';
+
+$(document).ready(function() {
+    $('#myArticles').DataTable();
+});
+
 $('#add_comment_form').submit(function (e) {
     e.preventDefault(); // Prevent the default form submission
 
@@ -40,10 +45,27 @@ $('#add_comment_form').submit(function (e) {
             nmbrComments.data('initial-count', initialCount + 1);
         },
         error: function (xhr, status, error) {
-            toastr.error('the server encounters an error!','Error',{timeOut: 5000,closeButton: true});
+            toastr.error(error,'Error',{timeOut: 5000,closeButton: true});
             $('#button-add-comment').css('cursor', 'auto');
             $('#reloadSpinner').hide();
             console.error(xhr.responseText);
         }
     });
 });
+
+$('#comment_form_comment').on('input', function () {
+    checkComment();
+});
+
+function checkComment() {
+    const textarea = document.getElementById('comment_form_comment'); 
+    const addButton = document.getElementById('button-add-comment');
+
+    if (textarea.value.trim() !== '') {
+        addButton.removeAttribute('disabled');
+        addButton.classList.remove('not-allowed');
+    } else {
+        addButton.setAttribute('disabled', 'disabled');
+        addButton.classList.add('not-allowed');
+    }
+}

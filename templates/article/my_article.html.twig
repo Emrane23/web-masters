@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My blogs
+{% endblock %}
+
+{% block body %}
+	<div class="text-center">
+		<h2>My blogs</h2>
+	</div><hr>
+    <div class="justifiy-content-center">
+		<table id="myArticles" class="table table-striped w-100" >
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Image</th>
+					<th>Title</th>
+					{# <th>Description</th> #}
+					<th>State</th>
+					<th>Created At</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for article in articles %}
+					<tr>
+						<td>{{ article.id }}</td>
+						<td class="text-center"> 
+						<img src="{{ (article.imageName ? vich_uploader_asset(article) : '/images/placeholder.jpg') | imagine_filter('squared_thumbnail_very_small') }}" alt="{{ article.title }}"> </td>
+						<td>{{ article.title }}</td>
+						{# <td>{{ article.description|u.truncate(50, '...', false) }}</td> #}
+						<td>
+							{{ article.isApproved ? '<span class="badge bg-success">Approved</span>' : '<span class="badge bg-danger">Pending</span>'}}
+						</td>
+						<td>{{ article.createdAt|time_diff }}</td>
+						<td> 
+							<form action="{{ path('app_article_delete', parameters = {'id': article.id}) }}" method="post">
+								<input type="hidden" name="csrf_token" value="{{ csrf_token('article_delete_'~ article.id) }}">
+								<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#myArticlesModal" data-id="{{ article.id }}" data-category="{{ article.category }}" data-title="{{ article.title }}" data-description="{{ article.description }}" data-image="{{ (article.imageName ? vich_uploader_asset(article) : '/images/placeholder.jpg') | imagine_filter('squared_thumbnail_medium') }}" data-id="{{ article.id }}" data-state="{{ article.isApproved ? '<span class=\'badge bg-success\'>Approved</span>' : '<span class=\'badge bg-danger\'>Pending</span>' }}">Show</button>
+								<button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Are you sure ?')">Delete</button>
+							</form>
+						 </td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+						{% include "partials/_modal_my_article.html.twig" %}
+
+    </div>
+
+{% endblock %}

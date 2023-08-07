@@ -64,6 +64,14 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
         
+        
+        if (in_array("ROLE_ADMIN", $token->getUser()->getRoles())) {
+            $request->getSession()->getFlashBag()->add(
+                'success',
+                'Welcome Admin !'
+             );
+            return new RedirectResponse($this->urlGenerator->generate('admin'));
+        }
         $request->getSession()->getFlashBag()->add(
             'notice',
             array('type' => 'success', 'url' => null, 'message' => 'Welcome '.$token->getUser()->fullname() .' !' ),

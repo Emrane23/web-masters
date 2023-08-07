@@ -12,7 +12,7 @@
 			<article class="mb-2">
 				<h2>{{ article.title }}</h2>
 				<div class="metadata">
-					🕤 Submitted
+					🕤 Submitted By <a href="#">{{ app.user and article.user.fullname == app.user.fullname ? 'Me' : article.user.fullname }}</a> On
 					{{ article.createdAt|date('d/m/Y \\A\\t H:i') }}
 					o'clock
 					<span class="badge bg-danger">

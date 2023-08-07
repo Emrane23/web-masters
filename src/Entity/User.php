@@ -255,4 +255,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->fullName(); // Adjust the property name according to your Category entity
+    }
 }
