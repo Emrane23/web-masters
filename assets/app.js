@@ -10,7 +10,9 @@ import './styles/app.scss';
 import toastr from 'toastr';
 
 $(document).ready(function() {
-    $('#myArticles').DataTable();
+    $('#myArticles').DataTable({
+        "lengthMenu": [ 5, 10, 15, 20]
+      });
 });
 
 $('#add_comment_form').submit(function (e) {

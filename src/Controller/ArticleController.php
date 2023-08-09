@@ -7,6 +7,7 @@ use App\Entity\Comment;
 use App\Form\ArticleFormType;
 use App\Form\CommentFormType;
 use App\Repository\ArticleRepository;
+use App\Repository\CategoryRepository;
 use App\Repository\CommentRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,6 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\Query\Expr;
+use App\Service\ObjectFiller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -24,6 +26,11 @@ use Vich\UploaderBundle\Handler\UploadHandler;
 
 class ArticleController extends AbstractController
 {
+    public $filler ;
+
+    public function __construct(ObjectFiller $filler) {
+        $this->filler = $filler;
+    }
 
     #[Route('/', name: 'app_article', methods: "GET")]
     public function index(ArticleRepository $repo, PaginatorInterface $paginator, Request $request): Response
@@ -44,17 +51,15 @@ class ArticleController extends AbstractController
 
     #[Route('/my-articles', methods: "GET")]
     #[IsGranted('ROLE_USER')]
-    public function myArticles(ArticleRepository $repo, PaginatorInterface $paginator, Request $request): Response
+    public function myArticles(ArticleRepository $repo,CategoryRepository $categoryRepository, PaginatorInterface $paginator, Request $request): Response
     {   
         // $expressionBuilder = Criteria::expr();
         // $criteria = Criteria::create()->where($expressionBuilder->eq('user',$this->getUser()))->orderBy(['createdAt' => Criteria::DESC]);
         // $articles = $paginator->paginate($repo->matching($criteria),
 
-        $articles = $paginator->paginate($repo->findBy(['user' => $user = $this->getUser()], ['createdAt' => 'DESC']),
-            $request->query->getInt('page', 1),
-            5
-        );
-        return $this->render('article/my_article.html.twig', compact('articles'));
+        $articles = $repo->findBy(['user' => $user = $this->getUser()], ['createdAt' => 'DESC']);
+        $categories = $categoryRepository->findAll();
+        return $this->render('article/my_article.html.twig', compact('articles', 'categories'));
     }
 
     #[Route('/articles/{id<\d+>}', methods: ["GET", "POST"])]
@@ -129,12 +134,16 @@ class ArticleController extends AbstractController
 
 
     #[Route('/articles/my-blog/edit', methods: ["POST"])]
-    public function editar(Request $request,ValidatorInterface $validator, EntityManagerInterface $em, UploadHandler $uploadHandler): Response
+    public function editMyArticle(Request $request, ValidatorInterface $validator, ArticleRepository $repo, UploadHandler $uploadHandler): Response
     {
         $articleId = $request->request->get('id');
-        $article = $em->getRepository(Article::class)->find($articleId);
-        $article->setTitle($request->request->get('title'));
-        $article->setDescription($request->request->get('description'));
+        $article = $repo->find($articleId);
+        
+        if (!$article) {
+            throw $this->createNotFoundException('The article #' . $articleId . ' does not exist');
+        }
+
+        $article = $this->filler->fill($article, $request->request->all());
         $file = $request->files->get('image');
 
         if ($file) {
@@ -145,23 +154,20 @@ class ArticleController extends AbstractController
         $errors = $validator->validate($article);
 
         if (count($errors) > 0) {
-            $errorMessages = [];
-            foreach ($errors as $error) {
-                $errorMessages[$error->getPropertyPath()][] = $error->getMessage();
-            }
-            
-            return $this->json(['errors' => $errorMessages], Response::HTTP_BAD_REQUEST);
-        }
-        
-            $em->persist($article);
-            $em->flush();
-            $url = $this->generateUrl('app_article_show', ['id' => $article->getId()]);
             $this->addFlash(
                 'notice',
-                array('type' => 'success', 'url' => $url, 'message' => 'successfully updated'),
+                array('type' => 'danger', 'url' => null, 'message' => $errors[0]->getPropertyPath()." : ". $errors[0]->getMessage() )
             );
             return $this->redirectToRoute('app_article_myarticles');
-    
+        }
+        
+        $repo->save($article,true) ;
+        $url = $this->generateUrl('app_article_show', ['id' => $article->getId()]);
+        $this->addFlash(
+            'notice',
+            array('type' => 'success', 'url' => $url, 'message' => 'successfully updated'),
+        );
+        return $this->redirectToRoute('app_article_myarticles');
     }
 
     #[Route('/articles/{id<\d+>}/delete', methods: ["POST"])]
