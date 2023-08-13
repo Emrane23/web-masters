@@ -13,10 +13,13 @@
 				</li>
 				{% if app.user %}
 				<li class="nav-item">
-					<a class="nav-link {{ app.request.get('_route') == 'app_article_create' ? 'active' :'app_article_create'}}" href="{{ path('app_article_create') }}">Create Article</a>
+					<a class="nav-link {{ app.request.get('_route') == 'app_article_create' ? 'active' :''}}" href="{{ path('app_article_create') }}">Create Article</a>
 				</li>
 				{% endif %}
-				
+
+				<li class="nav-item">
+					<a class="nav-link {{ app.request.get('_route') == 'app_contact' ? 'active' :''}}" href="{{ path('app_contact') }}">Contact</a>
+				</li>
 
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{ app.user ? app.user.fullname : '' }}</a>

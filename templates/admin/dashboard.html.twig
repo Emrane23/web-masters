@@ -27,8 +27,8 @@ const approved = {{ totalArticles | json_encode | raw }} - PendingArticle;
 var xValues = ["Approved", "Pending"];
 var yValues = [approved, PendingArticle];
 var barColors = [
-  "#b91d47",
   "#00aba9",
+  "#FFC107",
 ];
 new Chart("myChart", {
   type: "pie",

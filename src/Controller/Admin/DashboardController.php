@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Article;
 use App\Entity\Category;
+use App\Entity\Contact;
 use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineExtensions\Query\Mysql\DateFormat;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -58,9 +59,11 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
+        $numNotSeenContact = $this->pendingContact();
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Articles', 'fa fa-newspaper-o', Article::class);
         yield MenuItem::linkToCrud('Categories', 'fa fa-list-alt', Category::class);
+        yield MenuItem::linkToCrud("Contacts $numNotSeenContact", 'fa fa-envelope', Contact::class);
     }
 
     public function configureUserMenu(UserInterface $user): UserMenu
@@ -74,5 +77,20 @@ class DashboardController extends AbstractDashboardController
         //     MenuItem::section(),
         // ])
         ;
+    }
+
+    private function pendingContact()
+    {
+        $repository  = $this->getDoctrine()->getRepository(Contact::class);
+        $notSeenContact = $repository->findBy(['seen' => false]) ;
+        $numNotSeenContact = count($notSeenContact);
+        if ($numNotSeenContact == 0) {
+            return '' ;
+        }
+        $result =  $numNotSeenContact > 100 ? '99+' : $numNotSeenContact ;
+        return "<span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger'>
+        $result
+        <span class='visually-hidden'>unread messages</span>
+      </span>" ;
     }
 }

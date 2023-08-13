@@ -13,7 +13,7 @@ class ObjectFiller
     {
         $this->entityManager = $entityManager;
     }
-    
+
 
     /**
      * Fill object attributes with data from an associative array.
@@ -26,6 +26,10 @@ class ObjectFiller
     public function fill($object, array $data)
     {
         foreach ($data as $key => $value) {
+            if ($key === 'createdAt' || $key === 'updatedAt') {
+                continue; // Skip setting these attributes
+            }
+
             $methodName = "set" . ucfirst($key);
 
             if (method_exists($object, $methodName)) {
@@ -50,5 +54,16 @@ class ObjectFiller
         }
 
         return $object;
+    }
+
+    /**
+     * Converts an entity object to an associative array.
+     *
+     * @param object $entity The entity object to convert.
+     * @return array The associative array representation of the entity.
+     */
+    public function toArray($entity)
+    {
+        return get_object_vars($entity);
     }
 }
