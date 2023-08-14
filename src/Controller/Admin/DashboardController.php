@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Article;
 use App\Entity\Category;
 use App\Entity\Contact;
+use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineExtensions\Query\Mysql\DateFormat;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -64,6 +65,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Articles', 'fa fa-newspaper-o', Article::class);
         yield MenuItem::linkToCrud('Categories', 'fa fa-list-alt', Category::class);
         yield MenuItem::linkToCrud("Contacts $numNotSeenContact", 'fa fa-envelope', Contact::class);
+        yield MenuItem::linkToCrud("Users", 'fa fa-users', User::class);
     }
 
     public function configureUserMenu(UserInterface $user): UserMenu

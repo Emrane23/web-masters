@@ -265,7 +265,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString()
     {
-        return $this->fullName(); // Adjust the property name according to your Category entity
+        return $this->fullName();
     }
 
     public function isDisabled(): ?bool

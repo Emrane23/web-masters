@@ -6,6 +6,12 @@
 parameters:
 
 services:
+    App\ScheduledTask\UserEnablerTask:
+        arguments:
+            $userEnablerService: '@App\Service\UserEnablerService'
+
+    App\ScheduledTask\UserEnablerTaskHandler: ~
+
     App\Service\ObjectFiller:
     # default configuration for services in *this* file
     _defaults:
