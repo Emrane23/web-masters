@@ -6,6 +6,7 @@ use App\Entity\Traits\Timestampable;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -55,6 +56,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Article::class, orphanRemoval: true)]
     private Collection $articles;
+
+    #[ORM\Column(nullable: true, options:["default" => false])]
+    private ?bool $disabled = false;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $disabledAt = null;
 
     public function __construct()
     {
@@ -259,5 +266,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString()
     {
         return $this->fullName(); // Adjust the property name according to your Category entity
+    }
+
+    public function isDisabled(): ?bool
+    {
+        return $this->disabled;
+    }
+
+    public function setDisabled(bool $disabled): static
+    {
+        $this->disabled = $disabled;
+
+        return $this;
+    }
+
+    public function getDisabledAt(): ?\DateTimeInterface
+    {
+        return $this->disabledAt;
+    }
+
+    public function setDisabledAt(?\DateTimeInterface $disabledAt): static
+    {
+        $this->disabledAt = $disabledAt;
+
+        return $this;
     }
 }

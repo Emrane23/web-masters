@@ -29,4 +29,20 @@
     cursor: not-allowed;
     opacity: 0.5;
 }
+
+@keyframes flashBorder {
+  0%, 100% {
+    border-color: white;
+  }
+  50% {
+    border-color: red;
+  }
+}
+
+.flashing-border {
+  border: 2px solid white;
+  padding: 10px;
+  font-family: sans-serif;;
+  animation: flashBorder 2s infinite;
+}
   

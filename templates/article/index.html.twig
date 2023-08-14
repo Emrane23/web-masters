@@ -4,7 +4,11 @@
 {% endblock %}
 
 {% block body %}
-
+	<div class="d-flex justify-content-center my-2">
+		<div class="text-center col-12">
+			<p class="flashing-border text-muted">This account is disabled by the admin! you can create an other account.</p>
+		</div>
+	</div>
 	<h2>Welcome to my blogs</h2>
 
 	{% for article in articles %}
@@ -12,7 +16,9 @@
 			<article class="mb-2">
 				<h2>{{ article.title }}</h2>
 				<div class="metadata">
-					🕤 Submitted By <a href="#">{{ app.user and article.user.fullname == app.user.fullname ? 'Me' : article.user.fullname }}</a> On
+					🕤 Submitted By
+					<a href="#">{{ app.user and article.user.fullname == app.user.fullname ? 'Me' : article.user.fullname }}</a>
+					On
 					{{ article.createdAt|date('d/m/Y \\A\\t H:i') }}
 					o'clock
 					<span class="badge bg-danger">
@@ -28,9 +34,9 @@
 		</section>
 	{% endfor %}
 	<div style="">
-	<div class="mt-3 d-flex justify-content-center navigation">
-    {{ knp_pagination_render(articles) }}
-	</div>
+		<div class="mt-3 d-flex justify-content-center navigation">
+			{{ knp_pagination_render(articles) }}
+		</div>
 	</div>
 
 
