@@ -36,7 +36,9 @@
 							<form action="{{ path('app_article_delete', parameters = {'id': article.id}) }}" method="post">
 								<input type="hidden" name="csrf_token" value="{{ csrf_token('article_delete_'~ article.id) }}">
 								<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#myArticlesModal" data-id="{{ article.id }}" data-category="{{ article.category.id }}" data-title="{{ article.title }}" data-description="{{ article.description }}" data-image="{{ (article.imageName ? vich_uploader_asset(article) : '/images/placeholder.jpg') | imagine_filter('squared_thumbnail_medium') }}" data-id="{{ article.id }}" data-state="{{ article.isApproved ? '<span class=\'badge bg-success\'>Approved</span>' : '<span class=\'badge bg-danger\'>Pending</span>' }}">Show</button>
-								<button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Are you sure ?')">Delete</button>
+								{% if isUserActive() %}
+									<button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Are you sure ?')">Delete</button>
+								{% endif %}
 							</form>
 						 </td>
 					</tr>

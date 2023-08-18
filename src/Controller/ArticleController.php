@@ -65,7 +65,7 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/articles/{id<\d+>}', methods: ["GET", "POST"])]
-    public function show(Request $request, Article $article, CommentRepository $repo, PublisherInterface $publisher)
+    public function show(Request $request, Article $article, CommentRepository $repo)
     {
         if (!$article->isApproved()) {
             throw $this->createNotFoundException('The article #' . $article->getId() . ' does not exist');
@@ -79,12 +79,12 @@ class ArticleController extends AbstractController
             $comment->setArticle($article);
             $repo->save($comment, true);
             $html = $this->renderView('article/_comment.html.twig', ['comment' => $comment]);
-            $update = new Update(
-                '/path-to-resource',
-                json_encode(['message' => 'Hello, clients!'])
-            );
+            // $update = new Update(
+            //     '/path-to-resource',
+            //     json_encode(['message' => 'Hello, clients!'])
+            // );
         
-            $publisher($update);
+            // $publisher($update);
             return new JsonResponse(['success' => true, 'html' => $html]);
         } elseif ($form->isSubmitted() && !$form->isValid()) {
             $errors = $this->getFormErrors($form);
@@ -141,6 +141,7 @@ class ArticleController extends AbstractController
 
 
     #[Route('/articles/my-blog/edit', methods: ["POST"])]
+    // #[Security("user.isDisabled() != true")]
     public function editMyArticle(Request $request, ValidatorInterface $validator, ArticleRepository $repo, UploadHandler $uploadHandler): Response
     {
         $articleId = $request->request->get('id');

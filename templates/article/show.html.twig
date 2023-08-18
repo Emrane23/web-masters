@@ -26,7 +26,7 @@
 				<img src="{{ (article.imageName ? vich_uploader_asset(article) : '/images/placeholder.jpg') | imagine_filter('squared_thumbnail_medium') }}" class="m-1 rounded shadow" alt="{{ article.title }}" srcset="">
 				<p>{{ article.description }}</p>
 			</div>
-			{% if is_granted('ARTICLE_MANAGE',article ) %}
+			{% if is_granted('ARTICLE_MANAGE',article ) and isUserActive() %}
 				<form action="{{ path('app_article_delete', parameters = {'id': article.id}) }}" method="post">
 				<a href="{{ path('app_article_edit', parameters = {'id': article.id}) }}" class="btn btn-info">Edit</a>
 				<input type="hidden" name="csrf_token" value="{{ csrf_token('article_delete_'~ article.id) }}">

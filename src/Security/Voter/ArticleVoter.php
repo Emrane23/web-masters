@@ -30,7 +30,7 @@ class ArticleVoter extends Voter
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case 'ARTICLE_MANAGE':
-                return $user == $subject->getUser();
+                return  $user == $subject->getUser() ;
                 break;
             case self::VIEW:
                 // logic to determine if the user can VIEW

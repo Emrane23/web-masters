@@ -20,7 +20,7 @@
 
 		{% block javascripts %}
 			    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-			{# <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> #}
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 			<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 			<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 			<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -37,6 +37,13 @@
 		</style>
 		{% include "partials/_alert.html.twig" %}
 		{% include "partials/_nav.html.twig" %}
+		{% if app.user and isUserActive() != true %}
+			<div class="d-flex justify-content-center my-2">
+				<div class="text-center col-12">
+					<p class="flashing-border text-muted">This account is disabled by the admin! you can create an other account.</p>
+				</div>
+			</div>
+		{% endif %}
 		<main role="main" class="container"> {% block body %}{% endblock %}
 			</main>
 		</body>

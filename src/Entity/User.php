@@ -273,6 +273,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->disabled;
     }
 
+    public function isActive(): ?bool
+    {
+        return !$this->disabled;
+    }
+
     public function setDisabled(bool $disabled): static
     {
         $this->disabled = $disabled;
