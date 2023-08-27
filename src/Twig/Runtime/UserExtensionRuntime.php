@@ -16,6 +16,13 @@ class UserExtensionRuntime implements RuntimeExtensionInterface
     public function isUserActive(): bool
     {
         $user = $this->security->getUser();
-        return $user !== null && $user->isActive();
+        if ($user == null ) {
+            return true ;
+        }
+        if ($user !== null && !$user->isDisabled()){
+            return true ;
+        }else{
+            return false ;
+        };
     }
 }

@@ -16,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ArticleRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, public VoteRepository $voteRepository)
     {
         parent::__construct($registry, Article::class);
     }
@@ -37,6 +37,27 @@ class ArticleRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function calculateAverageVotesForArticle(Article $article)
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->select('AVG(v.vote) as average')
+            ->leftJoin('a.votes', 'v')
+            ->where('a = :article')
+            ->setParameter('article', $article);
+
+        $query = $qb->getQuery();
+        $result = $query->getSingleScalarResult();
+
+
+        return round($result,1);
+    }
+
+    public function calculateTotalVotesForArticle(Article $article)
+    {
+        $voteArticle = $this->voteRepository->findBy(['article' => $article]);
+        return count($voteArticle);
     }
 
 //    /**

@@ -11,6 +11,8 @@
 		{# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
 		{% block stylesheets %}
 			{{ encore_entry_link_tags('app') }}
+			<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 			<link rel="stylesheet" href="https://bootswatch.com/5/litera/bootstrap.min.css">
 			<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
 			<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,7 +21,7 @@
 		{% endblock %}
 
 		{% block javascripts %}
-			    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+			<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 			<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 			<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
@@ -37,7 +39,7 @@
 		</style>
 		{% include "partials/_alert.html.twig" %}
 		{% include "partials/_nav.html.twig" %}
-		{% if app.user and isUserActive() != true %}
+		{% if not isUserActive() %}
 			<div class="d-flex justify-content-center my-2">
 				<div class="text-center col-12">
 					<p class="flashing-border text-muted">This account is disabled by the admin! you can create an other account.</p>

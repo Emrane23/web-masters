@@ -30,6 +30,11 @@
     opacity: 0.5;
 }
 
+.star-rating {
+  display: inline-block;
+  font-size: 15px;
+}
+
 @keyframes flashBorder {
   0%, 100% {
     border-color: white;

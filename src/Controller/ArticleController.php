@@ -9,6 +9,7 @@ use App\Form\CommentFormType;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\CommentRepository;
+use App\Repository\VoteRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -65,7 +66,7 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/articles/{id<\d+>}', methods: ["GET", "POST"])]
-    public function show(Request $request, Article $article, CommentRepository $repo)
+    public function show(Request $request, Article $article, CommentRepository $repo, ArticleRepository $articleRepository, VoteRepository $voteRepository)
     {
         if (!$article->isApproved()) {
             throw $this->createNotFoundException('The article #' . $article->getId() . ' does not exist');
@@ -91,7 +92,12 @@ class ArticleController extends AbstractController
 
             return new JsonResponse(['errors' => $errors], 400);
         }
-        return $this->render('article/show.html.twig', ['article' => $article, 'form' => $form->createView()]);
+        $averageVotes = $articleRepository->calculateAverageVotesForArticle($article);
+        $totalVotes =  $articleRepository->calculateTotalVotesForArticle($article);
+        if ($this->getUser()) {
+            $voteUser =  $voteRepository->getUserVoteForArticle($article);
+        }
+        return $this->render('article/show.html.twig', ['article' => $article, 'form' => $form->createView(), 'averageVotes' => $averageVotes, 'totalVotes' => $totalVotes, 'voteUser' => isset($voteUser) ? $voteUser : null]);
     }
 
     #[Route('/articles/create', methods: ["GET", "POST"])]
