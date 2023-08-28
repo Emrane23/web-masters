@@ -49,17 +49,17 @@
 			{% endif %}
 			{% if app.user and isUserActive() %}
 				<div class="mt-3">
-					<div>
+					<div class="p-2 rating-box my-auto">
 						<div class="d-none" id="_token" data-token="{{ csrf_token(app.user.id) }}"></div>
 						<div class="d-none" id="article_id" data-article="{{ app.request.attributes.get('id') }}"></div>
 						<div class="d-none" id="rating_data" data-rate="{{ voteUser ? voteUser : 0 }}"></div>
-						<b>Tap to Rate:
-						</b><br>
+						<legend class="rating-label">Rate this page:
+						</legend><br>
 						{% for i in 1..5 %}
 							{% if i <= voteUser %}
-								<i class="fa fa-star fa-xs submit_star text-warning" id="submit_star_{{ loop.index }}" data-rating="{{ loop.index }}"></i>
+								<i class="fas fa-star submit_star fa-xl text-warning" id="submit_star_{{ loop.index }}" data-rating="{{ loop.index }}"></i>
 							{% else %}
-								<i class="fa fa-star star-light fa-xs submit_star" id="submit_star_{{loop.index}}" data-rating="{{ loop.index }}"></i>
+								<i class="fas fa-star star-light fa-xl submit_star" id="submit_star_{{loop.index}}" data-rating="{{ loop.index }}"></i>
 							{% endif %}
 						{% endfor %}
 						{# <i class="fa fa-star star-light fa-xs submit_star" id="submit_star_1" data-rating="1"></i>

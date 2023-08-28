@@ -30,9 +30,29 @@
     opacity: 0.5;
 }
 
+.rating-box {
+  padding: 0.75rem;
+  border: 1px solid rgba(148,151,155,0.2);
+  border-radius: 4px;
+  height: 70px;
+  width: 150px;
+  display: inline-block;
+}
+
+.rating-label {
+  margin-right: 0.7rem;
+  margin-bottom: 0.6rem;
+  user-select: none;
+  font-size: 0.8rem;
+}
+
 .star-rating {
   display: inline-block;
   font-size: 15px;
+}
+
+.submit_star {
+  margin: 0 !important;
 }
 
 @keyframes flashBorder {
